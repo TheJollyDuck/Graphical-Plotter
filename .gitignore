@@ -1,0 +1,10 @@
+
+
+# All object files
+*.o
+
+# executables
+*.exe
+
+# Release folder
+release/
