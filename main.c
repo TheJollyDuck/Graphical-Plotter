@@ -10,13 +10,16 @@
 int main(void) {
   
   plotData calcPlotData;
+  double omega = 0.0f;
   // plotData userData;
 
   printf("Initializing Calculator....\n");
   initializeGraph(&calcPlotData);
   // initializeGraph(&userData);
-
-  setSin(&calcPlotData);
+  printf("Please specify the omega coefficient: ");
+  scanf("%lf", &omega);
+  
+  setSin(&calcPlotData, omega);
 
   printf("Displaying Calculator Output....\n");
   printGraph(calcPlotData);

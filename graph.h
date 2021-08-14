@@ -20,9 +20,9 @@ typedef struct plotData {
 } plotData;
 
 void initializeGraph(plotData *data);
-// void setPlotData(plotData *data, plotData *userData);
+void setPlotData(plotData *data);
 
-void setSin(plotData *data);
+void setSin(plotData *data, double omega);
 void printGraph(plotData data);
 void closeGraph(plotData *data);
 
