@@ -25,6 +25,9 @@ int main(void) {
   printGraph(calcPlotData);
 
   closeGraph(&calcPlotData);
-  printf("Program Completed!\n");
+  printf("Program Completed!\nPress [Enter] to exit");
+
+  while ((getchar()) != '\n'); 
+  getchar(); 
   return 0;
 }
