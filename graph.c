@@ -112,28 +112,33 @@ void graph_sin2Coords(graph_plotData *data) {
   }
 
   uit axis = ((uit)(data->yLength)/2); /* X-axis of graph*/
-  uit amplSampleSize = data->yLength - axis +1; /* Sample size for Amplitude */
+  uit amplSampleSize = data->yLength - axis; /* Sample size for Amplitude */
 
   /* Scales amplitude to graph*/
   double amplPerSample = data->maxAmplitude/((float)amplSampleSize);
 
+  /* Search for position of sample on graph */
   for (uit i = 0; i < data->xLength; i++) {
     double position = 0;
 
+    /* Ignores sample at timestamp if value outside graph amplitude */
     if (tempValues[i] < data->maxAmplitude) {
+
       int j;
-      if (tempValues[i] > position) {
+      /* Checks whether sample is negative or postive in value */
+      if (tempValues[i] >= position) {
         for (j = axis; position < tempValues[i]; j--) {
-          position += amplPerSample;
+          position += amplPerSample; /* Increments until approx. position */
         }
       } else {
         for (j = axis; position > tempValues[i]; j++) {
-          position -= amplPerSample;
+          position -= amplPerSample; /* Decrements until approx. position */
         }
       }
       
+      /* 2nd check to see if sample is outside graph amplitude */
       if ((j > 0) && (j < (int)data->yLength)){
-        data->coordData[j][i] = data->lineChar;
+        data->coordData[j][i] = data->lineChar; /* Places the sample on graph */
       }
     }
 
@@ -164,6 +169,7 @@ void graph_setWave(graph_plotData *data) {
     paramsSet = realloc(paramsSet, params * sizeof(bool));
     paramsSet[params] = true;
 
+    /* Only exits the parameter input if all parameters have been set */
     for (uit i = 1; i < params; i++) {
       if (paramsSet[i] == true) {
         paramsSet[0] = true;
