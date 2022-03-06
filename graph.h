@@ -1,3 +1,21 @@
+/*
+ * TheJollyDuck
+ *
+ * Graph Plotter Header
+ *
+ * This header file contains all the necessary constants, type and function
+ * declarations for the code regarding the plotting of the functions.
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+
 
 #ifndef GRAPH_INCLUDED
 #define GRAPH_INCLUDED
@@ -13,18 +31,26 @@
 
 typedef unsigned int uit;
 
-typedef struct plotData {
+typedef struct graph_plotData {
   size_t xLength;
   size_t yLength;
+
+  short amplitude;
+  short frequency;
+
+  char lineChar;
+  char graphBackground;
   char **coordData;
-} plotData;
+} graph_plotData;
 
-void initializeGraph(plotData *data);
-void setPlotData(plotData *data);
+void graph_initialize(graph_plotData *);
+void graph_setPlotData(graph_plotData *);
 
-void setSin(plotData *data, double omega);
-void printGraph(plotData data);
-void closeGraph(plotData *data);
+//void graph_setSin(graph_plotData *, double);
+void graph_setWave(graph_plotData *);
+void graph_sin2Coords(graph_plotData *);
+void graph_printGraph(graph_plotData);
+void graph_closeGraph(graph_plotData *);
 
 
 #endif

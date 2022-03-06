@@ -9,25 +9,26 @@
 
 int main(void) {
   
-  plotData calcPlotData;
-  double omega = 0.0f;
-  // plotData userData;
+  graph_plotData calcPlotData;
+  // double omega = 0.0f;
+  // graph_plotData userData;
 
   printf("Initializing Calculator....\n");
-  initializeGraph(&calcPlotData);
+  graph_initialize(&calcPlotData);
   // initializeGraph(&userData);
-  printf("Please specify the omega coefficient: ");
-  scanf("%lf", &omega);
+  //printf("Please specify the omega coefficient: ");
+  //scanf("%lf", &omega);
   
-  setSin(&calcPlotData, omega);
+  // graph_setSin(&calcPlotData, omega);
+  graph_sin2Coords(&calcPlotData);
 
   printf("Displaying Calculator Output....\n");
-  printGraph(calcPlotData);
+  graph_printGraph(calcPlotData);
 
-  closeGraph(&calcPlotData);
+  graph_closeGraph(&calcPlotData);
   printf("Program Completed!\nPress [Enter] to exit");
 
   while ((getchar()) != '\n'); 
   getchar(); 
-  return 0;
+  return EXIT_SUCCESS;
 }

@@ -1,4 +1,12 @@
-
+#
+# TheJollyDuck
+#
+# .gitignore
+#
+# This file contains all the files and file types to be ignored for pushing
+# to the repository. Make sure to remove any temporary files to be ignored
+# in the future.
+#
 
 # All object files
 *.o

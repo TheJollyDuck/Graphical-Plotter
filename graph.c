@@ -1,15 +1,15 @@
 
 #include "graph.h"
+#include <math.h>
 
-void initializeGraph(plotData *data) {
+void graph_initialize(graph_plotData *data) {
 
   /* Initializing the display resolution */
-  setPlotData(data);
+  graph_setPlotData(data);
   // data->xLength = 120;
   // data->yLength = 80;
 
   /* Initializing the dynamic array */
-
   data->coordData = malloc((data->yLength) * sizeof(char*));
 
   for (uit i = 0; i < data->yLength; i++) {
@@ -21,22 +21,74 @@ void initializeGraph(plotData *data) {
   /* Initiazling the graph data so the values are expected */
   for (uit i = 0; i < data->yLength; i++) {
     for (uit j = 0; j < data->xLength; j++) {
-      data->coordData[i][j] = ' ';
+      data->coordData[i][j] = data->graphBackground;
+      // data->coordData[i][j] = ' ';
     }
   }
 }
 
-void setPlotData(plotData *data) {
-  printf("Please type in resolution of graph...\n");
+void graph_setPlotData(graph_plotData *data) {
+  bool optionSelected = false;
+  char userInput;
 
-  printf("Length: ");
-  scanf("%llu", &data->xLength);
+  /* Asks for input. Repeats if input is not valid */
+  while(optionSelected == false) {
 
-  printf("Height: ");
-  scanf("%llu", &data->yLength);
+    printf("Do you want to have a custom output? [Y/N] ");
+    scanf("%c", &userInput);
+
+    
+    switch(userInput) {
+
+      case 'y':
+      case 'Y':
+
+        optionSelected = true;
+        printf("Please type in resolution of graph...\n");
+
+        printf("Length [int] ");
+        scanf("%lu", &data->xLength);
+
+        printf("Height [int] ");
+        scanf("%lu", &data->yLength);
+        getchar();
+
+        printf("Line Character [char] ");
+        data->lineChar =  getchar();
+        getchar();
+
+        printf("Backgroung Character [char] ");
+        data->graphBackground =  getchar();
+        getchar();
+
+        break;
+
+      case 'N':
+      case 'n':
+
+        /* Option has been selected and breaks loop */
+        optionSelected = true;
+
+        /* Sets graph parameters */
+        data->xLength = 100;
+        data->yLength = 20;
+        data->lineChar = '*';
+        data->graphBackground = ' ';
+        break;
+
+      /* For other inputs by user */
+      default:
+        printf("Unrecognized input.\n");
+        break;
+    };
+  }
 }
 
-void setSin(plotData *data, double omega) {
+//void graph_setSin(graph_plotData *data, double omega) {
+void graph_sin2Coords(graph_plotData *data) {
+
+  /* Sets the parameters for plotting the wave to graph */
+  graph_setWave(data);
 
   /* Creates temporary storage of output of the sin function*/
   double *tempValues;
@@ -56,7 +108,7 @@ void setSin(plotData *data, double omega) {
   for (uit i = 0; i < data->xLength; i++) {
 
     /* Cos and Sin have been tested to work*/
-    tempValues[i] = sin(omega *i *PI_2);
+    tempValues[i] = sin(data->frequency *2 *i *PI_2);
     // tempValues[i] = cos(0.035*i*PI_2);
 
     /* Condition to find the maximum value / peak of the sin output */
@@ -93,13 +145,42 @@ void setSin(plotData *data, double omega) {
       position -= valPerPos;
       }
     }
-    data->coordData[j][i] = 219;
+    data->coordData[j][i] = data->lineChar;
+    // data->coordData[j][i] = 219;
   }
   /* frees the dynamically allocated array */
   free(tempValues);
 }
 
-void printGraph(plotData data) {
+void graph_setWave(graph_plotData *data) {
+  uit params = 1;
+  bool *paramsSet;
+  paramsSet = malloc(params * sizeof(bool));
+
+  while (paramsSet[0] == false) {
+    printf("Amplitude [int] ");
+    scanf("%hi", &data->amplitude);
+    params++;
+    paramsSet = realloc(paramsSet, params * sizeof(bool));
+    paramsSet[params] = true;
+
+    printf("Frequency F [int] ");
+    scanf("%hi", &data->frequency);
+    params++;
+    paramsSet = realloc(paramsSet, params * sizeof(bool));
+    paramsSet[params] = true;
+
+    for (uit i = 1; i < (params); i++) {
+      if (paramsSet[i] == true) {
+        paramsSet[0] = true;
+      } else {
+        paramsSet[0] = false;
+      }
+    }
+  }
+}
+
+void graph_printGraph(graph_plotData data) {
   printf("\n");
 
   for (uit i = 0; i < data.yLength; i++) {
@@ -112,7 +193,7 @@ void printGraph(plotData data) {
   printf("\n");
 }
 
-void closeGraph(plotData *data) {
+void graph_closeGraph(graph_plotData *data) {
 
   for (uit i = 0; i < data->yLength; i++) {
       free(data->coordData[i]);
@@ -124,7 +205,7 @@ void closeGraph(plotData *data) {
 
 /* BACKUPS */
 
-// void setSin(plotData *data) {
+// void setSin(graph_plotData *data) {
 
 //   /* Creates temporary storage of output of the sin function*/
 //   double *tempValues;
