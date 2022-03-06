@@ -51,6 +51,7 @@ void graph_setPlotData(graph_plotData *);
 //void graph_setSin(graph_plotData *, double);
 void graph_setWave(graph_plotData *);
 void graph_sin2Coords(graph_plotData *);
+void graph_clearGraph(graph_plotData *);
 void graph_printGraph(graph_plotData);
 void graph_closeGraph(graph_plotData *);
 

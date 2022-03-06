@@ -19,6 +19,10 @@ void graph_initialize(graph_plotData *data) {
   }
 
   /* Initiazling the graph data so the values are expected */
+  graph_clearGraph(data);
+}
+
+void graph_clearGraph(graph_plotData *data) {
   for (uit i = 0; i < data->yLength; i++) {
     for (uit j = 0; j < data->xLength; j++) {
       data->coordData[i][j] = data->graphBackground;
@@ -108,7 +112,7 @@ void graph_sin2Coords(graph_plotData *data) {
   }
 
   uit axis = ((uit)(data->yLength)/2); /* X-axis of graph*/
-  uit amplSampleSize = data->yLength - axis; /* Sample size for Amplitude */
+  uit amplSampleSize = data->yLength - axis +1; /* Sample size for Amplitude */
 
   /* Scales amplitude to graph*/
   double amplPerSample = data->maxAmplitude/((float)amplSampleSize);
@@ -127,8 +131,10 @@ void graph_sin2Coords(graph_plotData *data) {
           position -= amplPerSample;
         }
       }
-      printf("Here Fucked %i %i\n", i, j);
-      data->coordData[j][i] = data->lineChar;
+      
+      if ((j > 0) && (j < (int)data->yLength)){
+        data->coordData[j][i] = data->lineChar;
+      }
     }
 
   }

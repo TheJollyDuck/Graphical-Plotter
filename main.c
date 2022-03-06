@@ -25,6 +25,7 @@ int main(void) {
 
     printf("Displaying Calculator Output....\n");
     graph_printGraph(calcPlotData);
+    graph_clearGraph(&calcPlotData);
   }
 
   graph_closeGraph(&calcPlotData);
