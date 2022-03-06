@@ -35,8 +35,10 @@ typedef struct graph_plotData {
   size_t xLength;
   size_t yLength;
 
-  short amplitude;
+  double maxAmplitude;
+  double amplitude;
   short frequency;
+  short time;
 
   char lineChar;
   char graphBackground;

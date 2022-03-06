@@ -20,10 +20,12 @@ int main(void) {
   //scanf("%lf", &omega);
   
   // graph_setSin(&calcPlotData, omega);
-  graph_sin2Coords(&calcPlotData);
+  for (uit i = 0; i < 10; i++) {
+    graph_sin2Coords(&calcPlotData);
 
-  printf("Displaying Calculator Output....\n");
-  graph_printGraph(calcPlotData);
+    printf("Displaying Calculator Output....\n");
+    graph_printGraph(calcPlotData);
+  }
 
   graph_closeGraph(&calcPlotData);
   printf("Program Completed!\nPress [Enter] to exit");

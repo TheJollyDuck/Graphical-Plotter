@@ -61,6 +61,10 @@ void graph_setPlotData(graph_plotData *data) {
         data->graphBackground =  getchar();
         getchar();
 
+        printf("Max graph amplitude [char] ");
+        scanf("%lf", &data->maxAmplitude);
+        getchar();
+
         break;
 
       case 'N':
@@ -70,10 +74,11 @@ void graph_setPlotData(graph_plotData *data) {
         optionSelected = true;
 
         /* Sets graph parameters */
-        data->xLength = 100;
-        data->yLength = 20;
+        data->xLength = 150;
+        data->yLength = 30;
         data->lineChar = '*';
         data->graphBackground = ' ';
+        data->maxAmplitude = 2.0f;
         break;
 
       /* For other inputs by user */
@@ -94,62 +99,39 @@ void graph_sin2Coords(graph_plotData *data) {
   double *tempValues;
   tempValues = malloc((data->xLength) * sizeof(double));
 
-  /* Finds where the axis is on the plot data */
-  uit axis = ((uit)(data->yLength)/2) +1;
+  /* Scales the time to the graph in ms */
+  double timePerPos = ((data->time/1000.0f)/data->xLength);
 
-  /* Finds the positive and negative Y halves*/
-  uit topHalf = data->yLength - axis;
-  // uit bottomHalf = data->yLength - topHalf;
-
-  /* Finds the peak of the sin function */
-  double maxValue = 0;
-
-  /* Calculates the output of sin per x position */
+  /* Finds the value of sin for each timestamp */
   for (uit i = 0; i < data->xLength; i++) {
-
-    /* Cos and Sin have been tested to work*/
-    tempValues[i] = sin(data->frequency *2 *i *PI_2);
-    // tempValues[i] = cos(0.035*i*PI_2);
-
-    /* Condition to find the maximum value / peak of the sin output */
-    if (tempValues[i] > maxValue) {
-      maxValue = tempValues[i];
-    }
+    tempValues[i] = data->amplitude * sin(2 * PI_2 * data->frequency * timePerPos * i);
   }
-  
-  /* Increases the Max Value by 1 */
-  maxValue++;
 
-  /* Finds the value per interval for the graph*/
-  double valPerPos = maxValue / (topHalf * 2);
-  double position = valPerPos;
+  uit axis = ((uit)(data->yLength)/2); /* X-axis of graph*/
+  uit amplSampleSize = data->yLength - axis; /* Sample size for Amplitude */
 
-  /* Optional X Axis*/
-  // for (uit k = 0; k < data->xLength; k++) {
-  //   data->coordData[axis][k] = 223;
-  // }
+  /* Scales amplitude to graph*/
+  double amplPerSample = data->maxAmplitude/((float)amplSampleSize);
 
   for (uit i = 0; i < data->xLength; i++) {
+    double position = 0;
 
-    position = 0;
-
-    int j;
-    if (tempValues[i] > position) {
-
-      for (j = topHalf; tempValues[i] > position; j--) {
-      position += valPerPos;
+    if (tempValues[i] < data->maxAmplitude) {
+      int j;
+      if (tempValues[i] > position) {
+        for (j = axis; position < tempValues[i]; j--) {
+          position += amplPerSample;
+        }
+      } else {
+        for (j = axis; position > tempValues[i]; j++) {
+          position -= amplPerSample;
+        }
       }
-
-    } else {
-      for (j = topHalf; tempValues[i] < position; j++) {
-      position -= valPerPos;
-      }
+      printf("Here Fucked %i %i\n", i, j);
+      data->coordData[j][i] = data->lineChar;
     }
-    data->coordData[j][i] = data->lineChar;
-    // data->coordData[j][i] = 219;
+
   }
-  /* frees the dynamically allocated array */
-  free(tempValues);
 }
 
 void graph_setWave(graph_plotData *data) {
@@ -159,7 +141,7 @@ void graph_setWave(graph_plotData *data) {
 
   while (paramsSet[0] == false) {
     printf("Amplitude [int] ");
-    scanf("%hi", &data->amplitude);
+    scanf("%lf", &data->amplitude);
     params++;
     paramsSet = realloc(paramsSet, params * sizeof(bool));
     paramsSet[params] = true;
@@ -170,7 +152,13 @@ void graph_setWave(graph_plotData *data) {
     paramsSet = realloc(paramsSet, params * sizeof(bool));
     paramsSet[params] = true;
 
-    for (uit i = 1; i < (params); i++) {
+    printf("Time (ms) [int] ");
+    scanf("%hi", &data->time);
+    params++;
+    paramsSet = realloc(paramsSet, params * sizeof(bool));
+    paramsSet[params] = true;
+
+    for (uit i = 1; i < params; i++) {
       if (paramsSet[i] == true) {
         paramsSet[0] = true;
       } else {
